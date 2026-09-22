@@ -207,6 +207,14 @@ document.querySelectorAll('#ui [data-k]').forEach(el => {
     console.warn('no target for:', el.dataset.k);
 });
 
+/* ?rname=<name> prefills the recipient line (used for batch printing too) */
+const q = new URLSearchParams(location.search);
+if (q.has('rname')) {
+  const el = $('[data-k="rname"]');
+  el.value = q.get('rname');
+  el.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
 /* on phones start with the sections folded */
 if (matchMedia('(max-width:860px)').matches)
   document.querySelectorAll('#ui details').forEach(d => d.open = false);

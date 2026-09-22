@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>বিবাহ কার্ড — PDF</title>
+<title>Wedding Card — PDF</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600&display=swap" rel="stylesheet">
@@ -11,7 +11,7 @@
 :root{--ink:#cf2b33}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:#20242b;color:#e8e8e8;font-family:'Noto Serif Bengali',system-ui,sans-serif;display:flex;gap:18px;padding:18px;align-items:flex-start}
+body{background:#20242b;color:#e8e8e8;font-family:system-ui,-apple-system,sans-serif;display:flex;gap:18px;padding:18px;align-items:flex-start}
 
 /* ---------- UI ---------- */
 #ui{width:330px;flex:none;position:sticky;top:18px;max-height:calc(100vh - 36px);overflow:auto;background:#2a2f38;border-radius:10px;padding:14px}
@@ -32,7 +32,7 @@ button{font:inherit;font-size:13px;padding:9px 10px;border-radius:8px;border:0;c
 
 /* ---------- pages: each page = one photo, edge to edge ---------- */
 #stage{display:flex;flex-direction:column;gap:18px;transform-origin:top left}
-.pg{position:relative;container-type:inline-size;overflow:hidden;box-shadow:0 6px 24px #0008;color:var(--ink);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pg{font-family:'Noto Serif Bengali',serif;position:relative;container-type:inline-size;overflow:hidden;box-shadow:0 6px 24px #0008;color:var(--ink);-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .pg img{display:block;width:100%;height:100%}
 .p1{width:297mm;height:125.01mm;page:p1}
 .p2{width:297mm;height:122.64mm;page:p2}
@@ -78,29 +78,29 @@ button{font:inherit;font-size:13px;padding:9px 10px;border-radius:8px;border:0;c
 <body>
 
 <aside id="ui">
-  <h1>বিবাহ কার্ড — PDF</h1>
-  
+  <h1>Wedding Card — PDF</h1>
+  <p class="hint">All 4 photos join into one PDF (in order, at photo size). Text on <b>Page 1 (envelope)</b> is editable. Drag any text to move it; click it and use the arrow keys (Shift = 10px).</p>
   <button id="pdf">⬇ Download PDF</button>
   <div style="height:10px"></div>
 
-  <details open><summary>১ম পাতা — প্রাপক</summary>
-    <label>মাননীয় / মাননীয়া</label><input data-k="hon1" value="মাননীয় / মাননীয়া">
-    <label>শ্রীযুক্ত / শ্রীযুক্তা</label><input data-k="hon2" value="শ্রীযুক্ত / শ্রীযুক্তা">
-    <label>প্রাপকের নাম</label><input data-k="rname" placeholder="নাম">
-    <label>প্রাপকের ঠিকানা</label><input data-k="raddr" placeholder="গ্রাম, ডাকঘর, জেলা">
+  <details open><summary>Page 1 — Recipient</summary>
+    <label>Salutation line 1</label><input data-k="hon1" value="মাননীয় / মাননীয়া">
+    <label>Salutation line 2</label><input data-k="hon2" value="শ্রীযুক্ত / শ্রীযুক্তা">
+    <label>Recipient name</label><input data-k="rname" placeholder="Name">
+    <label>Recipient address</label><input data-k="raddr" placeholder="Village, Post, District">
   </details>
 
-  <details open><summary>১ম পাতা — প্রেরক</summary>
-    <label>প্রেরকের নাম</label><input data-k="sname" value="শ্রী হরিহর মিশ্র">
-    <label>প্রেরকের ঠিকানা</label><input data-k="saddr" value="নেহাট, বেনাডিহা, ঝাড়গ্রাম।">
-    <label>মোবাইল</label><input data-k="sphone" value="মোঃ - 7001476094">
+  <details open><summary>Page 1 — Sender</summary>
+    <label>Sender name</label><input data-k="sname" value="শ্রী হরিহর মিশ্র">
+    <label>Sender address</label><input data-k="saddr" value="নেহাট, বেনাডিহা, ঝাড়গ্রাম।">
+    <label>Mobile</label><input data-k="sphone" value="মোঃ - 7001476094">
   </details>
 
-  <fieldset><legend>অ্যাডজাস্ট</legend>
-    <label>লেখার সাইজ</label><input id="fs" type="range" min="0.7" max="1.5" step="0.05" value="1">
-    <label>প্রিভিউ সাইজ</label><input id="zoom" type="range" min="0.5" max="3" step="0.1" value="1">
+  <fieldset><legend>Adjust</legend>
+    <label>Text size</label><input id="fs" type="range" min="0.7" max="1.5" step="0.05" value="1">
+    <label>Preview size</label><input id="zoom" type="range" min="0.5" max="3" step="0.1" value="1">
     <div style="height:8px"></div>
-    <button id="reset">সব লেবেল আগের জায়গায়</button>
+    <button id="reset">Reset label positions</button>
   </fieldset>
 </aside>
 

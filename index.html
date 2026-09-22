@@ -17,7 +17,12 @@ body{background:#20242b;color:#e8e8e8;font-family:'Noto Serif Bengali',system-ui
 #ui{width:330px;flex:none;position:sticky;top:18px;max-height:calc(100vh - 36px);overflow:auto;background:#2a2f38;border-radius:10px;padding:14px}
 #ui h1{font-size:17px;margin:0 0 4px}
 #ui .hint{font-size:12px;opacity:.75;line-height:1.6;margin:0 0 10px}
-fieldset{border:1px solid #3d4553;border-radius:8px;margin:0 0 10px;padding:8px 10px}
+fieldset,details{border:1px solid #3d4553;border-radius:8px;margin:0 0 10px;padding:8px 10px}
+details{padding:6px 10px 8px}
+summary{cursor:pointer;font-size:12px;color:#9fb0c7;padding:2px 0;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ "}
+details[open] summary::before{content:"▾ "}
 legend{font-size:12px;color:#9fb0c7;padding:0 4px}
 label{display:block;font-size:12px;color:#a9b4c4;margin:6px 0 2px}
 input{width:100%;padding:6px 8px;border-radius:6px;border:1px solid #465064;background:#1b1f26;color:#eee;font:inherit;font-size:13px}
@@ -49,6 +54,13 @@ button{font:inherit;font-size:13px;padding:9px 10px;border-radius:8px;border:0;c
   .mv:hover{outline:1px dashed #c8102e99}
   .mv.sel{outline:1px dashed #0a7}
 }
+@media (max-width:860px){
+  body{flex-direction:column;gap:12px;padding:10px 10px 80px}
+  #ui{width:100%;position:static;max-height:none}
+  #stage{align-self:center}
+  #pdf{position:fixed;left:10px;right:10px;bottom:10px;width:auto;padding:13px;z-index:9;box-shadow:0 6px 18px #0009}
+  input{font-size:16px}
+}
 @page p1{size:297mm 125.01mm;margin:0}
 @page p2{size:297mm 122.64mm;margin:0}
 @page p3a{size:297mm 118.17mm;margin:0}
@@ -71,21 +83,22 @@ button{font:inherit;font-size:13px;padding:9px 10px;border-radius:8px;border:0;c
   <button id="pdf">⬇ Download PDF</button>
   <div style="height:10px"></div>
 
-  <fieldset><legend>১ম পাতা — প্রাপক</legend>
+  <details open><summary>১ম পাতা — প্রাপক</summary>
     <label>মাননীয় / মাননীয়া</label><input data-k="hon1" value="মাননীয় / মাননীয়া">
     <label>শ্রীযুক্ত / শ্রীযুক্তা</label><input data-k="hon2" value="শ্রীযুক্ত / শ্রীযুক্তা">
     <label>প্রাপকের নাম</label><input data-k="rname" placeholder="নাম">
     <label>প্রাপকের ঠিকানা</label><input data-k="raddr" placeholder="গ্রাম, ডাকঘর, জেলা">
-  </fieldset>
+  </details>
 
-  <fieldset><legend>১ম পাতা — প্রেরক</legend>
+  <details open><summary>১ম পাতা — প্রেরক</summary>
     <label>প্রেরকের নাম</label><input data-k="sname" value="শ্রী হরিহর মিশ্র">
     <label>প্রেরকের ঠিকানা</label><input data-k="saddr" value="নেহাট, বেনাডিহা, ঝাড়গ্রাম।">
     <label>মোবাইল</label><input data-k="sphone" value="মোঃ - 7001476094">
-  </fieldset>
+  </details>
 
   <fieldset><legend>অ্যাডজাস্ট</legend>
     <label>লেখার সাইজ</label><input id="fs" type="range" min="0.7" max="1.5" step="0.05" value="1">
+    <label>প্রিভিউ সাইজ</label><input id="zoom" type="range" min="0.5" max="3" step="0.1" value="1">
     <div style="height:8px"></div>
     <button id="reset">সব লেবেল আগের জায়গায়</button>
   </fieldset>
@@ -180,17 +193,23 @@ $('#pdf').onclick = () => { document.title = fileName(); window.print(); };
 
 /* fit preview on screen */
 function fit(){
-  const avail = innerWidth - ui.offsetWidth - 54;
-  Z = Math.max(.2, Math.min(1, avail / 1123));   /* 297mm @96dpi */
-  stage.style.setProperty('--zoom', Z);
+  const stacked = innerWidth <= 860;
+  const avail = stacked ? innerWidth - 20 : innerWidth - ui.offsetWidth - 54;
+  Z = Math.max(.12, Math.min(1, avail / 1123));   /* 297mm @96dpi */
+  stage.style.setProperty('--zoom', Z * (+$('#zoom').value || 1));
 }
 addEventListener('resize', fit);
+$('#zoom').oninput = fit;
 
 /* self-check: every input must have a target on a page */
 document.querySelectorAll('#ui [data-k]').forEach(el => {
   if (!document.querySelector(`#stage [data-k="${el.dataset.k}"]`))
     console.warn('no target for:', el.dataset.k);
 });
+
+/* on phones start with the sections folded */
+if (matchMedia('(max-width:860px)').matches)
+  document.querySelectorAll('#ui details').forEach(d => d.open = false);
 
 fit();
 </script>
